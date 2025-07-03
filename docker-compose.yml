@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .                        # 👈 changed to root, so app.py is included
+      dockerfile: backend/Dockerfile   # 👈 still using backend Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app                          # 👈 mount the entire project
+    working_dir: /app                  # 👈 set working directory to root
+    container_name: backend-container
+    command: python app.py             # 👈 run app.py from root
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    volumes:
+      - ./frontend:/app
+    container_name: frontend-container
+    depends_on:
+      - backend
