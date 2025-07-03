@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from backend.routes import api_bp
 from backend.extensions import db, ma
+import os
 
 def create_app():
     app = Flask(__name__)
@@ -29,4 +30,5 @@ def create_app():
 # Entry point
 if __name__ == "__main__":
     app = create_app()
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Use dynamic port from environment (Render)
+    app.run(host="0.0.0.0", port=port, debug=True)

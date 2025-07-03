@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .                                
 # copy entire root into container
+ENV PORT=5000
 
 EXPOSE 5000
 
