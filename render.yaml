@@ -1,21 +1,18 @@
 services:
   - type: web
     name: employee-feedback-backend
-    env: docker
-    repo: https://github.com/RakshithaThirthakar/Employee-Feedback-system
-    dockerfilePath: backend/Dockerfile
-    buildCommand: docker-compose build backend
-    
+    env: python
+    plan: free
     branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn "app:create_app()"
     autoDeploy: true
 
   - type: web
     name: employee-feedback-frontend
-    env: docker
-    repo: https://github.com/RakshithaThirthakar/Employee-Feedback-system
-    dockerfilePath: frontend/Dockerfile
-    buildCommand: docker-compose build frontend
-    
+    env: static
     plan: free
     branch: main
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
     autoDeploy: true
