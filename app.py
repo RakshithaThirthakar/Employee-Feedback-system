@@ -8,7 +8,11 @@ def create_app():
     app = Flask(__name__)
     
     # CORS config for frontend access
-    CORS(app, origins=["http://localhost:3000", "http://localhost:3001","https://employee-feedback-system-6j56zoask-rakshithas-projects-1dc0e2e6.vercel.app"], supports_credentials=True)
+    CORS(app, origins=[
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://employee-feedback-system-krmpj6x84-rakshithas-projects-1dc0e2e6.vercel.app"
+], supports_credentials=True)
 
     # Database config
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///feedback.db"
