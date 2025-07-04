@@ -5,8 +5,7 @@ services:
     repo: https://github.com/RakshithaThirthakar/Employee-Feedback-system
     dockerfilePath: backend/Dockerfile
     buildCommand: docker-compose build backend
-    startCommand: docker-compose up backend
-    plan: free
+    
     branch: main
     autoDeploy: true
 
@@ -16,7 +15,7 @@ services:
     repo: https://github.com/RakshithaThirthakar/Employee-Feedback-system
     dockerfilePath: frontend/Dockerfile
     buildCommand: docker-compose build frontend
-    startCommand: docker-compose up frontend
+    
     plan: free
     branch: main
     autoDeploy: true
