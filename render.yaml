@@ -13,5 +13,5 @@ services:
     env: static
     branch: main
     buildCommand: npm install && npm run build
-    staticPublishPath: build
+    staticPublishPath: frontend/build
     autoDeploy: true
