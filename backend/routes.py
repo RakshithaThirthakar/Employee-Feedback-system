@@ -4,6 +4,7 @@ from backend.models import User, Feedback
 from backend.schemas import user_schema, users_schema, feedback_schema
 from backend.extensions import db
 from backend.crud import create_feedback, get_latest_feedback_by_employee_id
+from sqlalchemy import func  # needed for ilike
 
 api_bp = Blueprint("api", __name__)
 
@@ -20,7 +21,7 @@ def signup():
     role = data.get("role", "").lower()
     if not all([username, password, role]):
         return jsonify({"message": "Missing fields"}), 400
-    if role == "manager" and User.query.filter_by(role="manager").first():
+    if role == "manager" and User.query.filter(func.lower(User.role) == "manager").first():
         return jsonify({"message": "A manager already exists"}), 403
     hashed_pw = generate_password_hash(password)
     new_user = User(username=username, password=hashed_pw, role=role)
@@ -83,3 +84,17 @@ def get_latest(employee_id):
         "skill": latest.skill,
         "teamwork": latest.teamwork
     }), 200
+
+# ✅ Get manager info
+@api_bp.route("/manager", methods=["GET"])
+def get_manager():
+    manager = User.query.filter(func.lower(User.role) == "manager").first()
+    if not manager:
+        return jsonify({"message": "No manager found"}), 404
+    return user_schema.jsonify(manager), 200
+
+# 🧪 Get all users (for debugging)
+@api_bp.route("/users", methods=["GET"])
+def get_all_users():
+    users = User.query.all()
+    return users_schema.jsonify(users), 200
