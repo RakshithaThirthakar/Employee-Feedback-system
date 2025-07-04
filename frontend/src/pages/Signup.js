@@ -108,14 +108,16 @@ function Signup() {
     const role = e.target.role.value;
 
     try {
-      await axios.post("http://localhost:5000/api/signup", {
-        username,
-        password,
-        role,
-      },
-    {
+      const API = process.env.REACT_APP_API_URL;
+
+await axios.post(`${API}/signup`, {
+  username,
+  password,
+  role,
+}, {
   withCredentials: true
 });
+
       alert("Signup successful! 🎉 Please login.");
       window.location.href = "/";
     } catch (err) {
