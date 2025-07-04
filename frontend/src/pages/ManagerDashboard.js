@@ -735,7 +735,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { PieChart, Pie, Cell, Tooltip,ResponsiveContainer, Legend  } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useNavigate } from "react-router-dom";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA66CC"];
@@ -758,10 +758,13 @@ function ManagerDashboard() {
     teamwork: 0, teamwork_hover: 0,
   });
 
+  const API = process.env.REACT_APP_API_URL; // ✅ Added
+
   const user = JSON.parse(localStorage.getItem("user"));
-const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
   useEffect(() => {
-    axios.get("http://localhost:5000/api/employees")
+    axios.get(`${API}/employees`)
       .then(res => setEmployees(res.data))
       .catch(() => alert("Could not load employees"));
   }, []);
@@ -773,7 +776,7 @@ const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   const handleFeedbackSubmit = async () => {
     try {
-      await axios.post("http://localhost:5000/api/feedback", {
+      await axios.post(`${API}/feedback`, {
         employee_id: selectedEmployee.id,
         ...newFeedback,
         communication: ratings.communication,
@@ -898,7 +901,6 @@ const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
                 {Object.keys(ratingDescriptions).map((key) => (
                   <div key={key} style={{ marginBottom: "2.5rem" }}>
                     <div style={{ marginBottom: "0.5rem", textTransform: "capitalize", fontWeight: 600 }}>{key}</div>
-
                     <div style={{ display: "flex", gap: "4px", justifyContent: "center", marginBottom: "0.2rem" }}>
                       {Array.from({ length: 10 }, (_, i) => (
                         <div key={i} style={{ width: "calc(min(6vw, 60px))", textAlign: "center", fontSize: "0.75rem", color: "#4b5563" }}>
@@ -906,7 +908,6 @@ const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
                         </div>
                       ))}
                     </div>
-
                     <div
                       onMouseLeave={() => setRatings(prev => ({ ...prev, [key + "_hover"]: 0 }))}
                       style={{ display: "flex", alignItems: "flex-end", gap: "4px", justifyContent: "center" }}
@@ -928,7 +929,6 @@ const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
                         </div>
                       ))}
                     </div>
-
                     <div style={{ display: "flex", justifyContent: "space-between", marginTop: "0.25rem", fontSize: "0.75rem", color: "#6b7280" }}>
                       <span>Very Bad (0)</span>
                       <div style={{ flex: 1 }} />
@@ -943,26 +943,26 @@ const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
                   📊 Employee Rating Summary
                 </h4>
                 <ResponsiveContainer width="100%" height={300}>
-                                    <PieChart>
-                                      <Pie
-                                        data={ratingData}
-                                        dataKey="value"
-                                        nameKey="name"
-                                        cx="50%"
-                                        cy="50%"
-                                        fill="#8884d8"
-                                        outerRadius={100}
-                                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                                        labelLine={false}
-                                      >
-                                        {ratingData.map((entry, index) => (
-                                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                        ))}
-                                      </Pie>
-                                      <Tooltip />
-                                      <Legend verticalAlign="bottom" height={36} />
-                                    </PieChart>
-                                  </ResponsiveContainer>
+                  <PieChart>
+                    <Pie
+                      data={ratingData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      fill="#8884d8"
+                      outerRadius={100}
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      labelLine={false}
+                    >
+                      {ratingData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend verticalAlign="bottom" height={36} />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </>
