@@ -266,10 +266,12 @@ function EmployeeDashboard() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const API = process.env.REACT_APP_API_URL; // ✅ Use env variable
+
   useEffect(() => {
     if (!user || user.role !== "employee") return;
     axios
-      .get(`http://localhost:5000/api/employee/${user.id}/latest-feedback`)
+      .get(`${API}/employee/${user.id}/latest-feedback`)
       .then((res) => setFeedback(res.data))
       .catch((err) => console.error("Could not load feedback", err));
   }, []);
@@ -291,18 +293,12 @@ function EmployeeDashboard() {
 
   const getEmoji = (sentiment) => {
     switch (sentiment) {
-      case "very_bad":
-        return "😠 Very Bad";
-      case "bad":
-        return "😟 Bad";
-      case "neutral":
-        return "😐 Neutral";
-      case "good":
-        return "🙂 Good";
-      case "excellent":
-        return "😄 Excellent";
-      default:
-        return "❓";
+      case "very_bad": return "😠 Very Bad";
+      case "bad": return "😟 Bad";
+      case "neutral": return "😐 Neutral";
+      case "good": return "🙂 Good";
+      case "excellent": return "😄 Excellent";
+      default: return "❓";
     }
   };
 
@@ -322,7 +318,7 @@ function EmployeeDashboard() {
           }}
         />
         <h2 style={{ fontSize: "1.4rem", marginBottom: "2rem", fontWeight: "bold" }}>
-          Welcome, {user?.username || "Manager"}
+          Welcome, {user?.username || "Employee"}
         </h2>
         <nav style={{ display: "flex", flexDirection: "column", gap: "0.8rem", width: "100%" }}>
           {["View Profile", "Team", "Company", "Help", "Logout"].map((item, index) => (
@@ -361,7 +357,6 @@ function EmployeeDashboard() {
           <>
             <div style={{ background: "#fff", padding: "1rem", borderRadius: "12px", marginBottom: "1.5rem" }}>
               <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
-               
                 <h1 style={{ fontSize: "1.5rem" }}>{user.username}</h1>
               </div>
               <p><strong>Strengths:</strong></p>
@@ -373,14 +368,13 @@ function EmployeeDashboard() {
 
             {/* Ratings and Pie Chart */}
             <div
-  style={{
-    display: "flex",
-    flexDirection: window.innerWidth < 768 ? "column" : "row",
-    gap: "1rem",
-    flexWrap: "wrap",
-  }}
->
-
+              style={{
+                display: "flex",
+                flexDirection: window.innerWidth < 768 ? "column" : "row",
+                gap: "1rem",
+                flexWrap: "wrap",
+              }}
+            >
               <div style={{ flex: 1, background: "#fff", padding: "1rem", borderRadius: "12px", minWidth: "300px" }}>
                 <h3 style={{ fontSize: "1.25rem", marginBottom: "1rem" }}>⭐ Your Ratings</h3>
                 {ratingData.map((rating) => (
