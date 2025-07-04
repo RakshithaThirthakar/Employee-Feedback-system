@@ -173,12 +173,12 @@ function Login() {
     try {
       localStorage.clear(); // Clear previous session
 
-      const response = await axios.post("http://localhost:5000/api/login", {
+      const response = await axios.post(`${API}/login`, {
         username,
         password,
-      },{
-  withCredentials: true
-});
+      }, {
+        withCredentials: true
+      });
 
       const user = response.data.user; // ✅ FIXED: correctly access the user object
       localStorage.setItem("user", JSON.stringify(user));
